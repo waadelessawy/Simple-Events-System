@@ -4,6 +4,9 @@ const controller=require("../Controllers/speakerController")
 const express_validator=require("express-validator");
 const {body, param, query}=require("express-validator");
 
+
+
+// router.use(authMW);
 router.route("")
 router.route("/speakers")
 .get(controller.getAllSpeakers)
@@ -11,5 +14,6 @@ router.route("/speakers")
      controller.createSpeaker)
 .put(controller.updateSpeaker)
 .delete(controller.deleteSpeaker)
+router.get("/speakers/:id",controller.getSpeakerById)
 
 module.exports=router;

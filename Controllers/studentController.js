@@ -1,14 +1,43 @@
+const { response } = require("express");
+const { query } = require("express");
+const { request } = require("express");
 const {validationResult}=require("express-validator");
 const Student=require("../Models/studentModel");
 
+
+
 module.exports.getAllStudents=(request,response)=>{
+
+    // if(request.role !=="admin")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
     Student.find({})
            .then((data)=>{
-               response.status(200).json({data});
+               response.status(200).json(data);
+               console.log(data);
 
            })
            .catch(error=>next(error))
     
+}
+module.exports.getStudentById=(request,response)=>{
+    // if(request.role !=="admin" || request.role !=="student")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
+    Student.findById({_id:request.params.id})
+           .then(data=>{
+               response.status(200).json(data);
+               console.log(data);
+           })
+
+    // response.status(200).json({message:"department by ID"});
+    // console.log(request.query)
+    // console.log(request.params.id)
+
+
+
 }
 
 module.exports.createStudent=(request,response,next)=>{

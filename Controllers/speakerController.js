@@ -10,6 +10,17 @@ module.exports.getAllSpeakers=(request,response)=>{
            .catch(error=>next(error))
     
 }
+module.exports.getSpeakerById=(request,response)=>{
+    // if(request.role !=="admin" || request.role !=="student")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
+    Speaker.findById({_id:request.params.id})
+           .then(data=>{
+               response.status(200).json(data);
+               console.log(data);
+           })
+}
 
 module.exports.createSpeaker=(request,response,next)=>{
 

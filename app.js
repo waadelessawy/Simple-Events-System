@@ -33,8 +33,18 @@ server.use((request,response,next)=>{
 server.use(body_parser.json());
 server.use(body_parser.urlencoded({extended:false}));
 
+
+
+server.use((request,response,next)=>{
+
+    response.header("Access-Control-Allow-Origin","*");
+    response.header("Access-Control-Allow-Methods","GET,POST,DELETE,PUT,OPTIONS");
+    response.header("Access-Control-Allow-Headers","Content-Type,Authorization")
+    next();
+
+})
 //Routers
-server.use(authRouter);
+// server.use(authRouter);
 server.use(studentRouter);
 server.use(speakerRouter);
 server.use(eventRouter);
