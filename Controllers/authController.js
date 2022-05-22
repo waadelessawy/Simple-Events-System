@@ -13,7 +13,7 @@ module.exports.login=(request,response,next)=>{
          ,role:"admin"},
          "myNameIsWaad",
          {expiresIn:"1h"});
-         response.status(200).json({msg:"login",token})
+         response.status(200).json([msg="login",token,role="admin"])
      }
 
      else{
@@ -32,7 +32,7 @@ module.exports.login=(request,response,next)=>{
                         ,role:"speaker"},
                         "myNameIsWaad",
                         {expiresIn:"1h"});
-                        response.status(200).json({msg:"login",token})
+                        response.status(200).json({msg:"login",token,role:"speaker"})
                 })
                 .catch(error=>next(error))
 
@@ -42,7 +42,7 @@ module.exports.login=(request,response,next)=>{
                     ,role:"student"},
                     "myNameIsWaad",
                     {expiresIn:"1h"});
-                    response.status(200).json({msg:"login",token})
+                    response.status(200).json({msg:"login",token,role:"student"})
     
                  
              }

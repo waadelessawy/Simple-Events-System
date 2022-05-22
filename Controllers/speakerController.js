@@ -4,7 +4,8 @@ const Speaker=require("../Models/speakerModel");
 module.exports.getAllSpeakers=(request,response)=>{
     Speaker.find({})
            .then((data)=>{
-               response.status(200).json({data});
+               response.status(200).json(data);
+               console.log(data);
 
            })
            .catch(error=>next(error))
@@ -24,10 +25,10 @@ module.exports.getSpeakerById=(request,response)=>{
 
 module.exports.createSpeaker=(request,response,next)=>{
 
-    if(request.role !=="admin")
-    {
-       throw new Error("Not Authorizd");
-    }
+    // if(request.role !=="admin")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
     let result = validationResult(request);
     if(!result.isEmpty()){
         let message=result.array().reduce((current,error)=>current+error.msg," ");
@@ -37,11 +38,13 @@ module.exports.createSpeaker=(request,response,next)=>{
 
     }
     let speaker = new Speaker({
-        _id:request.body.id,
+        _id:request.body._id,
         email:request.body.email,
         username:request.body.username,
         password:request.body.password, 
-        address:request.body.address
+        city: request.body.city, 
+        street:request.body.street, 
+        building:request.body.building
     })
     speaker.save()
     .then((data)=>{ 
@@ -54,16 +57,18 @@ module.exports.createSpeaker=(request,response,next)=>{
 
 module.exports.updateSpeaker=(request,response,next)=>{
 
-    if(request.role !=="admin" && request.role!=="speaker")
-    {
-       throw new Error("Not Authorizd");
-    }
-    Speaker.updateOne({_id:request.body.id},{
+    // if(request.role !=="admin" && request.role!=="speaker")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
+    Speaker.updateOne({_id:request.params.id},{
         $set:{
             email:request.body.email,
             username:request.body.username,
             password:request.body.password, 
-            address:request.body.address
+            city: request.body.city, 
+            street:request.body.street, 
+            building:request.body.building
         }
     }).then(data=>{
         if(data.matchedCount==0)
@@ -78,11 +83,11 @@ module.exports.updateSpeaker=(request,response,next)=>{
 
 
 module.exports.deleteSpeaker=(request,response,next)=>{
-       if(request.role !=="admin")
-       {
-            throw new Error("Not Authorizd");
-       }  
-        Speaker.deleteOne({_id:request.body.id},{
+    //    if(request.role !=="admin")
+    //    {
+    //         throw new Error("Not Authorizd");
+    //    }  
+        Speaker.deleteOne({_id:request.params.id},{
           
         }).then(data=>{
              if(data.deletedCount==0)

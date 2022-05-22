@@ -28,13 +28,6 @@ server.use((request,response,next)=>{
     console.log(request.url,request.method);
     next();
 });
-
-// // body parsing middleware
-server.use(body_parser.json());
-server.use(body_parser.urlencoded({extended:false}));
-
-
-
 server.use((request,response,next)=>{
 
     response.header("Access-Control-Allow-Origin","*");
@@ -43,8 +36,15 @@ server.use((request,response,next)=>{
     next();
 
 })
+// // body parsing middleware
+server.use(body_parser.json());
+server.use(body_parser.urlencoded({extended:false}));
+
+
+
+
 //Routers
-// server.use(authRouter);
+server.use(authRouter);
 server.use(studentRouter);
 server.use(speakerRouter);
 server.use(eventRouter);

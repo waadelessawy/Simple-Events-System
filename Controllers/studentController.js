@@ -36,16 +36,17 @@ module.exports.getStudentById=(request,response)=>{
     // console.log(request.query)
     // console.log(request.params.id)
 
-
-
 }
 
+
+
 module.exports.createStudent=(request,response,next)=>{
-    if(request.role !=="admin")
-    {
-       throw new Error("Not Authorizd");
-    }
+    // if(request.role !=="admin")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
     let result = validationResult(request);
+    console.log(result);
     if(!result.isEmpty()){
         let message=result.array().reduce((current,error)=>current+error.msg," ");
         let error = new Error(message);
@@ -54,7 +55,8 @@ module.exports.createStudent=(request,response,next)=>{
 
     }
     let student = new Student({
-        _id:request.body.id,
+        _id:request.body._id,
+        username:request.body.username,
         email:request.body.email,
         password:request.body.password 
     })
@@ -69,13 +71,14 @@ module.exports.createStudent=(request,response,next)=>{
 
 
 module.exports.updateStudent=(request,response,next)=>{
-    if(request.role !=="admin" && request.role!=="student")
-    {
-       throw new Error("Not Authorizd");
-    }
+    // if(request.role !=="admin" && request.role!=="student")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
 
-    Student.updateOne({_id:request.body.id},{
+    Student.updateOne({_id:request.params.id},{
         $set:{
+            username:request.body.username,
             email:request.body.email,
             password:request.body.password
         }
@@ -91,14 +94,15 @@ module.exports.updateStudent=(request,response,next)=>{
 }
 
 
+
 module.exports.deleteStudent=(request,response,next)=>{
 
-       if(request.role !=="admin")
-       {
-           throw new Error("Not Authorizd");
-       }
+    //    if(request.role !=="admin")
+    //    {
+    //        throw new Error("Not Authorizd");
+    //    }
    
-        Student.deleteOne({_id:request.body.id},{
+        Student.deleteOne({_id:request.params.id},{
           
         }).then(data=>{
              if(data.deletedCount==0)
