@@ -8,6 +8,7 @@ let speakerSchema = new mongoose.Schema({
     password:String, 
     city: String, 
     street:String , 
-    building:String
+    building:String,
+    role:String
 })
 module.exports=mongoose.model("speakers",speakerSchema);

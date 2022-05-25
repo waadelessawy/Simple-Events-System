@@ -4,7 +4,6 @@ const controller=require("../Controllers/speakerController")
 const express_validator=require("express-validator");
 const {body, param, query}=require("express-validator");
 const authMW=require("../MiddleWares/authMiddleWare");
-// const authRouter = require("../Routers/authRouter");
 
 
 

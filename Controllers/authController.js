@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const Student=require("../Models/studentModel");
 const Speaker=require("../Models/speakerModel");
+const studentController=require("../Controllers/studentController");
+const speakerController=require("../Controllers/speakerController");
 
 module.exports.login=(request,response,next)=>{
 
@@ -13,7 +15,8 @@ module.exports.login=(request,response,next)=>{
          ,role:"admin"},
          "myNameIsWaad",
          {expiresIn:"1h"});
-         response.status(200).json([msg="login",token,role="admin"])
+         console.log("token from controller",token)
+         response.status(200).json({msg:"login",token,role:"admin"})
      }
 
      else{
@@ -57,6 +60,7 @@ module.exports.login=(request,response,next)=>{
      {
 
      }
+
+
     
 }
-

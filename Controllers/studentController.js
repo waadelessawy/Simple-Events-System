@@ -7,11 +7,7 @@ const Student=require("../Models/studentModel");
 
 
 module.exports.getAllStudents=(request,response)=>{
-
-    // if(request.role !=="admin")
-    // {
-    //    throw new Error("Not Authorizd");
-    // }
+    console.log("roleee is",request.role)
     Student.find({})
            .then((data)=>{
                response.status(200).json(data);
@@ -21,30 +17,27 @@ module.exports.getAllStudents=(request,response)=>{
            .catch(error=>next(error))
     
 }
+
 module.exports.getStudentById=(request,response)=>{
-    // if(request.role !=="admin" || request.role !=="student")
-    // {
-    //    throw new Error("Not Authorizd");
-    // }
+    if(request.role !=="admin" && request.role !=="student")
+    {
+       throw new Error("Not Authorizd");
+    }
     Student.findById({_id:request.params.id})
            .then(data=>{
                response.status(200).json(data);
                console.log(data);
            })
 
-    // response.status(200).json({message:"department by ID"});
-    // console.log(request.query)
-    // console.log(request.params.id)
-
 }
 
 
 
 module.exports.createStudent=(request,response,next)=>{
-    // if(request.role !=="admin")
-    // {
-    //    throw new Error("Not Authorizd");
-    // }
+    if(request.role !=="admin" && request.role !=="student")
+    {
+       throw new Error("Not Authorizd");
+    }
     let result = validationResult(request);
     console.log(result);
     if(!result.isEmpty()){
@@ -58,7 +51,8 @@ module.exports.createStudent=(request,response,next)=>{
         _id:request.body._id,
         username:request.body.username,
         email:request.body.email,
-        password:request.body.password 
+        password:request.body.password ,
+        
     })
     student.save()
     .then((data)=>{ 
@@ -71,10 +65,10 @@ module.exports.createStudent=(request,response,next)=>{
 
 
 module.exports.updateStudent=(request,response,next)=>{
-    // if(request.role !=="admin" && request.role!=="student")
-    // {
-    //    throw new Error("Not Authorizd");
-    // }
+    if(request.role !=="admin" && request.role !=="student" )
+    {
+       throw new Error("Not Authorizd");
+    }
 
     Student.updateOne({_id:request.params.id},{
         $set:{
@@ -97,10 +91,10 @@ module.exports.updateStudent=(request,response,next)=>{
 
 module.exports.deleteStudent=(request,response,next)=>{
 
-    //    if(request.role !=="admin")
-    //    {
-    //        throw new Error("Not Authorizd");
-    //    }
+       if(request.role !=="admin" )
+       {
+           throw new Error("Not Authorizd");
+       }
    
         Student.deleteOne({_id:request.params.id},{
           

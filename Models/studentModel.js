@@ -6,6 +6,7 @@ const mongoose=require("mongoose");
     username:String,
     email:{type:String,unique:true},
     password:String,   
+    role:String
  
  });
 
