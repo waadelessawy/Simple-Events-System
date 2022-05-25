@@ -3,15 +3,17 @@ const { query } = require("express");
 const { request } = require("express");
 const {validationResult}=require("express-validator");
 const Student=require("../Models/studentModel");
-
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+const salt = bcrypt.genSaltSync(saltRounds);
 
 
 module.exports.getAllStudents=(request,response)=>{
-    console.log("roleee is",request.role)
+ 
     Student.find({})
            .then((data)=>{
                response.status(200).json(data);
-               console.log(data);
+          
 
            })
            .catch(error=>next(error))
@@ -34,6 +36,9 @@ module.exports.getStudentById=(request,response)=>{
 
 
 module.exports.createStudent=(request,response,next)=>{
+
+  
+   
     if(request.role !=="admin" && request.role !=="student")
     {
        throw new Error("Not Authorizd");
@@ -45,6 +50,7 @@ module.exports.createStudent=(request,response,next)=>{
         let error = new Error(message);
         error.status=422;
         throw error;
+      
 
     }
     let student = new Student({
@@ -52,8 +58,11 @@ module.exports.createStudent=(request,response,next)=>{
         username:request.body.username,
         email:request.body.email,
         password:request.body.password ,
-        
+
     })
+   
+    student.password= bcrypt.hashSync(student.password, salt);
+ 
     student.save()
     .then((data)=>{ 
         
@@ -74,7 +83,7 @@ module.exports.updateStudent=(request,response,next)=>{
         $set:{
             username:request.body.username,
             email:request.body.email,
-            password:request.body.password
+            password:bcrypt.hashSync(request.body.password, salt)
         }
     }).then(data=>{
         if(data.matchedCount==0)
@@ -86,7 +95,6 @@ module.exports.updateStudent=(request,response,next)=>{
 
         
 }
-
 
 
 module.exports.deleteStudent=(request,response,next)=>{

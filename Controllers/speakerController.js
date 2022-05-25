@@ -1,5 +1,11 @@
 const {validationResult}=require("express-validator");
 const Speaker=require("../Models/speakerModel");
+const bcrypt = require("bcrypt");
+const { request } = require("express");
+const { response } = require("express");
+const saltRounds = 10;
+const salt = bcrypt.genSaltSync(saltRounds);
+
 
 module.exports.getAllSpeakers=(request,response)=>{
 
@@ -23,6 +29,7 @@ module.exports.getSpeakerById=(request,response)=>{
                console.log(data);
            })
 }
+
 
 module.exports.createSpeaker=(request,response,next)=>{
 
@@ -48,6 +55,9 @@ module.exports.createSpeaker=(request,response,next)=>{
         building:request.body.building,
         role:request.body.role
     })
+    const salt = bcrypt.genSaltSync(saltRounds);
+    speaker.password= bcrypt.hashSync(speaker.password, salt);
+ 
     speaker.save()
     .then((data)=>{ 
         
@@ -64,10 +74,11 @@ module.exports.updateSpeaker=(request,response,next)=>{
        throw new Error("Not Authorizd");
     }
     Speaker.updateOne({_id:request.params.id},{
+      
         $set:{
             email:request.body.email,
             username:request.body.username,
-            password:request.body.password, 
+            password:bcrypt.hashSync(request.body.password, salt),
             city: request.body.city, 
             street:request.body.street, 
             building:request.body.building
@@ -75,6 +86,8 @@ module.exports.updateSpeaker=(request,response,next)=>{
     }).then(data=>{
         if(data.matchedCount==0)
         throw new Error("Speaker not exists");
+
+     
         response.status(200).json({message:"Speaker updated",data});
 
     })

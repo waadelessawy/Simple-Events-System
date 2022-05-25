@@ -16,7 +16,7 @@ router.route("/students")
 .post(
     // body("id").isInt().withMessage("id should be intger"),
     controller.createStudent)
-// router.get("/student/:id",controller.getStudentById)
+
 
 router.put("/students/:id",controller.updateStudent)
 router.delete("/students/:id",controller.deleteStudent)

@@ -3,7 +3,7 @@ const mongoose=require("mongoose");
 
  let studentSchema=new mongoose.Schema({
     _id:Number,
-    username:String,
+    username:{type:String,unique:true},
     email:{type:String,unique:true},
     password:String,   
     role:String
