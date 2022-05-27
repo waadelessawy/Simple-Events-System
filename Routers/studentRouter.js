@@ -8,7 +8,7 @@ const controller=require("../Controllers/studentController");
 const express_validator=require("express-validator");
 const {body, param, query}=require("express-validator");
 
-router.use(authMW);
+// router.use(authMW);
 
 router.route("/students")
 
@@ -18,9 +18,9 @@ router.route("/students")
     controller.createStudent)
 
 
-router.put("/students/:id",controller.updateStudent)
-router.delete("/students/:id",controller.deleteStudent)
-router.get("/students/:id",controller.getStudentById)
+router.put("/students/:id" ,authMW,controller.updateStudent)
+router.delete("/students/:id",authMW,controller.deleteStudent)
+router.get("/students/:id",authMW,controller.getStudentById)
 
 
 module.exports=router;

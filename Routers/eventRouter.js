@@ -7,14 +7,14 @@ const authMW=require("../MiddleWares/authMiddleWare");
 
 
 
-router.use(authMW);
+// router.use(authMW);
 router.route("/events")
 
 .get(controller.getAllEvents)
 .post(
     //  body("id").isInt().withMessage("id should be intger"),
 controller.createEvent)
-router.put("/events/:id",controller.updateEvent)
-router.delete("/events/:id",controller.deleteEvent)
-router.get("/events/:id",controller.getEventById)
+router.put("/events/:id",authMW,controller.updateEvent)
+router.delete("/events/:id",authMW,controller.deleteEvent)
+router.get("/events/:id",authMW,controller.getEventById)
 module.exports=router;

@@ -7,7 +7,7 @@ const authMW=require("../MiddleWares/authMiddleWare");
 
 
 
-router.use(authMW);
+// router.use(authMW);
 // router.route("")
 router.route("/speakers")
 .get(controller.getAllSpeakers)
@@ -15,8 +15,8 @@ router.route("/speakers")
 
 
 
-router.delete("/speakers/:id",controller.deleteSpeaker)
-router.get("/speakers/:id",controller.getSpeakerById)
-router.put("/speakers/:id",controller.updateSpeaker)
+router.delete("/speakers/:id",authMW,controller.deleteSpeaker)
+router.get("/speakers/:id",authMW,controller.getSpeakerById)
+router.put("/speakers/:id",authMW,controller.updateSpeaker)
 
 module.exports=router;

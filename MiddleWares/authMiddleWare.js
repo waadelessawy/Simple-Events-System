@@ -11,8 +11,11 @@ module.exports=(request,response,next)=>{
        token=request.get("Authorization").split(" ")[1];
    
        decodedToken= jwt.verify(token,"ColdPlayIsTheBest");
+       console.log("token ",token)
+       console.log("request ",request.role)
 
        request.role=decodedToken.role;
+
 
    }
    catch(error)

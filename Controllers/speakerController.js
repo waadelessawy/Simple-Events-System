@@ -5,6 +5,7 @@ const { request } = require("express");
 const { response } = require("express");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
+const mongoose = require("mongoose");
 
 
 module.exports.getAllSpeakers=(request,response)=>{
@@ -21,6 +22,7 @@ module.exports.getAllSpeakers=(request,response)=>{
 module.exports.getSpeakerById=(request,response)=>{
     if(request.role !=="admin" && request.role !=="speaker")
     {
+        console.log(request.role)
        throw new Error("Not Authorizd");
     }
     Speaker.findById({_id:request.params.id})
@@ -33,10 +35,6 @@ module.exports.getSpeakerById=(request,response)=>{
 
 module.exports.createSpeaker=(request,response,next)=>{
 
-    if(request.role !=="admin" && request.role !=="speaker")
-    {
-       throw new Error("Not Authorizd");
-    }
     let result = validationResult(request);
     if(!result.isEmpty()){
         let message=result.array().reduce((current,error)=>current+error.msg," ");
@@ -46,7 +44,7 @@ module.exports.createSpeaker=(request,response,next)=>{
 
     }
     let speaker = new Speaker({
-        _id:request.body._id,
+        _id: mongoose.Types.ObjectId(),
         email:request.body.email,
         username:request.body.username,
         password:request.body.password, 

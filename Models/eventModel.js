@@ -5,10 +5,10 @@ let eventSchema = new mongoose.Schema({
     
     title:{type:String,required :true},
     date:String,
-    // mainSpeakerId:mongoose.Types.ObjectId, 
-    mainSpeakerId:Number, 
-    // otherSpeakersId:[mongoose.Types.ObjectId],
-    otherSpeakersId:[Number],
+    mainSpeakerId:mongoose.Types.ObjectId, 
+    // mainSpeakerId:Number, 
+    otherSpeakersId:[mongoose.Types.ObjectId],
+    // otherSpeakersId:[Number],
     studentsId:[Number]
 })
 module.exports=mongoose.model("events",eventSchema);

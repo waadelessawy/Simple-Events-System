@@ -13,10 +13,10 @@ module.exports.getAllEvents=(request,response)=>{
     
 }
 module.exports.getEventById=(request,response)=>{
-    if(request.role !=="admin" && request.role !=="student" && request.role!=="speaker")
-    {
-       throw new Error("Not Authorizd");
-    }
+    // if(request.role !=="admin" && request.role !=="student" && request.role!=="speaker")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
     Event.findById({_id:request.params.id})
            .then(data=>{
                response.status(200).json(data);
@@ -25,10 +25,10 @@ module.exports.getEventById=(request,response)=>{
 }
 
 module.exports.createEvent=(request,response,next)=>{
-    if(request.role !=="admin")
-    {
-       throw new Error("Not Authorizd");
-    }
+    // if(request.role !=="admin")
+    // {
+    //    throw new Error("Not Authorizd");
+    // }
     let result = validationResult(request);
     if(!result.isEmpty()){
         let message=result.array().reduce((current,error)=>current+error.msg," ");

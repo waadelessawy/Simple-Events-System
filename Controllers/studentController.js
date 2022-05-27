@@ -4,8 +4,11 @@ const { request } = require("express");
 const {validationResult}=require("express-validator");
 const Student=require("../Models/studentModel");
 const bcrypt = require("bcrypt");
+const req = require("express/lib/request");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
+const Event=require("../Models/eventModel");
+
 
 
 module.exports.getAllStudents=(request,response)=>{
@@ -33,42 +36,85 @@ module.exports.getStudentById=(request,response)=>{
 
 }
 
+module.exports.StudentEvents=(request,response,next)=>{
+    Event.find({})
+           .then((data)=>{
+               for(let i = 0;i<data; i++){
+                   for(let j=0 ; j<data[i].studentsId ;j++){
+                       if(request.params._id == data[i].studentsId[j])
+                       {
+                        response.status(200).json(data[i]);
+                       }
 
+                   }
+
+
+               }
+             
+
+           })
+           .catch(error=>next(error))
+
+
+    //    this.EventService.getAllEvents().subscribe(a=>{
+//     //  this.events=a;
+//      for(let i=0;i<a.length;i++){
+//         for(let j=0;j<a[i].studentsId.length;j++){
+//           if(this.parameterVal==a[i].studentsId[j]){
+//             console.log(a[i].studentsId[j])
+//             this.events.push(a[i]);
+//           }
+//         }
+//      }
+//    })
+//  console.log(this.events)
+   
+
+
+}
 
 module.exports.createStudent=(request,response,next)=>{
-
-  
    
-    if(request.role !=="admin" && request.role !=="student")
-    {
-       throw new Error("Not Authorizd");
-    }
-    let result = validationResult(request);
-    console.log(result);
-    if(!result.isEmpty()){
-        let message=result.array().reduce((current,error)=>current+error.msg," ");
-        let error = new Error(message);
-        error.status=422;
-        throw error;
-      
+    Student.find({})
+    .then((data)=>{
+        for(let i =0;i<data.length;i++){
+            if(data[i+1] == null && data !=null){
+                let id = (data[i]._id) + 1;
 
-    }
-    let student = new Student({
-        _id:request.body._id,
-        username:request.body.username,
-        email:request.body.email,
-        password:request.body.password ,
+                let student = new Student({
+                            _id:id,
+                            username:request.body.username,
+                            email:request.body.email,
+                            password:request.body.password 
+                        })
+        student.password= bcrypt.hashSync(student.password, salt);
+        student.save()
+        .then(data=>{
+            response.status(201).json({ message: "student created", data });
+        })
+        .catch(error => next(error));
+
+            }else{
+                let id = 0;
+            let student = new Student({
+                _id: id,
+                email: request.body.email,
+                password:request.body.password,
+                username:request.body.username
+            })
+            student.password= bcrypt.hashSync(student.password, salt);
+            student.save()
+            .then(data=>{
+                response.status(201).json({ message: "student created", data });
+            })
+            .catch(error => next(error));
+
+            }
+        }
+   
 
     })
-   
-    student.password= bcrypt.hashSync(student.password, salt);
- 
-    student.save()
-    .then((data)=>{ 
-        
-        response.status(200).json({message:"student created",data})
-
-    }).catch(error=>next(error));
+  
 }
 
 
